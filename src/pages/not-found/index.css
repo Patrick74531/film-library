@@ -1,0 +1,43 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+}
+
+.not-found-title {
+  font-size: 96px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.not-found-description {
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.not-found-button {
+  background-color: transparent;
+  border: 2px solid #e50914;
+  color: #e50914;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.not-found-button:hover {
+  background-color: #e50914;
+  color: white;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}

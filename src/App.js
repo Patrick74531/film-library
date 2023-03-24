@@ -15,7 +15,7 @@ function App() {
       const response = await loadMovies();
 
       setFilmMap(response);
-      // localStorage.setItem('filmData', JSON.stringify(response));
+      localStorage.setItem('filmData', JSON.stringify(response));
 
       setIsLoading(false);
     };
@@ -35,6 +35,7 @@ function App() {
             element={<FilmDetail {...item} />}
           />
         ))}
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

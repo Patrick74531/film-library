@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import ViedoPlayer from '../../components/vedio-player'
-import YouTubeIcon from '@mui/icons-material/YouTube'
-import './index.css'
-import FilmReview from '../../components/film-review'
+import { useState } from 'react';
+import ViedoPlayer from '../../components/vedio-player';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import './index.css';
+import FilmReview from '../../components/film-review';
 
-const API_KEY = process.env.REACT_APP_YTB_API_KEY
+const API_KEY = process.env.REACT_APP_YTB_API_KEY;
 
 function FilmDetail(props) {
-  const { backdrop_path, poster_path, title, overview, tagline } = props
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [ytbFilmId, setYtbFilmId] = useState('')
+  const { backdrop_path, poster_path, title, overview, tagline } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ytbFilmId, setYtbFilmId] = useState('');
 
   const fechFlilmClipId = () => {
     fetch(
@@ -17,12 +17,12 @@ function FilmDetail(props) {
     )
       .then((data) => data.json())
       .then((data) => setYtbFilmId(data.items[0].id.videoId))
-      .catch((err) => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
   const handleModalToggle = () => {
-    fechFlilmClipId()
-    setIsModalOpen(!isModalOpen)
-  }
+    fechFlilmClipId();
+    setIsModalOpen(!isModalOpen);
+  };
 
   return (
     <div className="FilmDetail is-hydrated">
@@ -50,16 +50,14 @@ function FilmDetail(props) {
           {overview}
         </p>
       </div>
-      <div>
-        <FilmReview title={title} />
-      </div>
+      <div>{/* <FilmReview title={title} /> */}</div>
       <ViedoPlayer
         isOpen={isModalOpen}
         onClose={handleModalToggle}
         embedId={ytbFilmId}
       />
     </div>
-  )
+  );
 }
 
 export function FilmDetailEmpty() {
@@ -70,7 +68,7 @@ export function FilmDetailEmpty() {
         <span>No film selected</span>
       </p>
     </div>
-  )
+  );
 }
 
-export default FilmDetail
+export default FilmDetail;

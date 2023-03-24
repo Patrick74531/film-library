@@ -18,7 +18,10 @@ function FilmLibrary() {
       const response = await loadMovies();
 
       setFilmMap([...filmMap, ...response]);
-
+      localStorage.setItem(
+        'filmData',
+        JSON.stringify([...filmMap, ...response])
+      );
       setIsLoading(false);
     };
     if (page > 1) {

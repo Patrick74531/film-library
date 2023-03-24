@@ -1,10 +1,9 @@
-import React from 'react'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import './index.css'
+import React from 'react';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import './index.css';
 const ViedoPlayer = ({ embedId, isOpen, onClose }) => {
-  console.log('embedId', embedId)
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -28,7 +27,7 @@ const ViedoPlayer = ({ embedId, isOpen, onClose }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ViedoPlayer
+export default ViedoPlayer;

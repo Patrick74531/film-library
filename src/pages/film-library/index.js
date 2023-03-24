@@ -1,67 +1,79 @@
-import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
-import { useFilm } from '../../context/film-context'
-import FilmRow from '../film-row'
-import YearDropdown from '../../components/year-dropdown'
-import './index.css'
+import { useState, useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useFilm } from '../../context/film-context';
+import FilmRow from '../film-row';
+import YearDropdown from '../../components/year-dropdown';
+import useFilmLoader from '../../hooks/load-movies';
+import './index.css';
 
-const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY
 function FilmLibrary() {
-  const { filmMap, setFilmMap } = useFilm()
-  const [isFave, setIsFave] = useState(false)
-  const [page, setPage] = useState(1)
-  const [year, setYear] = useState(2022)
-
-  const loadMovies = () => {
-    setPage(page + 1)
-  }
-
-  const handleIsFave = () => {
-    setIsFave(true)
-  }
-  const handleIsAll = () => {
-    setIsFave(false)
-  }
-  const handleAddFave = (e) => {
-    let faveList = [...filmMap]
-    const updatedFilms = faveList.map((item) => {
-      if (item.id === e.id) {
-        return { ...item, isFave: true }
-      }
-      return item
-    })
-    setFilmMap(updatedFilms)
-  }
-  const handleRemoveFave = (e) => {
-    let faveList = [...filmMap]
-    const updatedFilms = faveList.map((item) => {
-      if (item.id === e.id) {
-        return { ...item, isFave: false }
-      }
-      return item
-    })
-    setFilmMap(updatedFilms)
-  }
-  const handleChangeYear = (e) => {
-    setFilmMap([])
-    setYear(e)
-  }
+  const { filmMap, setFilmMap, page, setPage, setYear, setIsLoading } =
+    useFilm();
+  const [isFave, setIsFave] = useState(false);
+  const { loadMovies } = useFilmLoader();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const loadMovies = async () => {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_watch_monetization_types=flatrate&primary_release_year=${year}`
-      )
-        .then((data) => data.json())
-        .then((data) => data.results)
-        .then((data) => data.map((item) => ({ ...item, isFave: false })))
-        .catch((err) => console.log(err))
+    const fechMovies = async () => {
+      const response = await loadMovies();
 
-      setFilmMap([...filmMap, ...response])
+      setFilmMap([...filmMap, ...response]);
+
+      setIsLoading(false);
+    };
+    if (page > 1) {
+      fechMovies();
     }
-    loadMovies()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, year])
+  }, [page]);
+
+  const loadMoreMovies = () => {
+    setPage(() => page + 1);
+
+    // const fechMovies = async () => {
+    //   const response = await loadMovies();
+
+    //   setFilmMap([...filmMap, ...response]);
+
+    //   setIsLoading(false);
+    //   console.log(page);
+    // };
+    // fechMovies();
+    // console.log(page);
+  };
+
+  const handleIsFave = () => {
+    setIsFave(true);
+  };
+  const handleIsAll = () => {
+    setIsFave(false);
+  };
+  const handleAddFave = (e) => {
+    let faveList = [...filmMap];
+    const updatedFilms = faveList.map((item) => {
+      if (item.id === e.id) {
+        return { ...item, isFave: true };
+      }
+      return item;
+    });
+    setFilmMap(updatedFilms);
+  };
+  const handleRemoveFave = (e) => {
+    let faveList = [...filmMap];
+    const updatedFilms = faveList.map((item) => {
+      if (item.id === e.id) {
+        return { ...item, isFave: false };
+      }
+      return item;
+    });
+    setFilmMap(updatedFilms);
+  };
+  const handleChangeYear = (e) => {
+    // setFilmMap([]);
+    setYear(e);
+    localStorage.setItem('filmYear', JSON.stringify(e));
+    navigate('/films');
+  };
 
   return (
     <div className="FilmLibrary">
@@ -108,17 +120,18 @@ function FilmLibrary() {
                 {...item}
               />
             ))}
-        <button className="load-more" onClick={loadMovies}>
+        <button className="load-more" onClick={loadMoreMovies}>
           loadMoreMovies
         </button>
       </div>
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
+
         <Outlet />
       </div>
     </div>
-  )
+  );
 }
 
-export default FilmLibrary
+export default FilmLibrary;

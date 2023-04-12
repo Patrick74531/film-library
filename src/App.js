@@ -9,13 +9,12 @@ import useFilmLoader from './hooks/load-movies';
 
 function App() {
   const { loadMovies } = useFilmLoader();
-  const { filmMap, year, setFilmMap, setIsLoading } = useFilm();
+  const { films, year, setFilms, setIsLoading } = useFilm();
   useEffect(() => {
     const fechMovies = async () => {
       const response = await loadMovies();
 
-      setFilmMap(response);
-      localStorage.setItem('filmData', JSON.stringify(response));
+      setFilms(response);
 
       setIsLoading(false);
     };
@@ -28,7 +27,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="films" element={<FilmLibrary />}>
         <Route index element={<FilmDetailEmpty />} />
-        {filmMap?.map((item) => (
+        {films?.map((item) => (
           <Route
             key={item.id}
             path={`${item.id}`}

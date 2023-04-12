@@ -1,9 +1,8 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import './index.css'
-const videoID = '_Z3QKkl1WyM'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './index.css';
+const videoID = '_Z3QKkl1WyM';
 const HomePage = () => {
-  const navigate = useNavigate()
   return (
     <div className="App">
       <div className="video-overlay"></div>
@@ -17,12 +16,12 @@ const HomePage = () => {
         />
       </div>
       <div className="content">
-        <button onClick={() => navigate('/films')} className="cool-button">
+        <Link to="/films" className="cool-button">
           GO TO MY FILM LIBRARY
-        </button>
+        </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

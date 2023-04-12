@@ -7,8 +7,7 @@ import useFilmLoader from '../../hooks/load-movies';
 import './index.css';
 
 function FilmLibrary() {
-  const { filmMap, setFilmMap, page, setPage, setYear, setIsLoading } =
-    useFilm();
+  const { films, setFilms, page, setPage, setYear, setIsLoading } = useFilm();
   const [isFave, setIsFave] = useState(false);
   const { loadMovies } = useFilmLoader();
   const navigate = useNavigate();
@@ -17,11 +16,8 @@ function FilmLibrary() {
     const fechMovies = async () => {
       const response = await loadMovies();
 
-      setFilmMap([...filmMap, ...response]);
-      localStorage.setItem(
-        'filmData',
-        JSON.stringify([...filmMap, ...response])
-      );
+      setFilms([...films, ...response]);
+      localStorage.setItem('filmData', JSON.stringify([...films, ...response]));
       setIsLoading(false);
     };
     if (page > 1) {
@@ -32,17 +28,6 @@ function FilmLibrary() {
 
   const loadMoreMovies = () => {
     setPage(() => page + 1);
-
-    // const fechMovies = async () => {
-    //   const response = await loadMovies();
-
-    //   setFilmMap([...filmMap, ...response]);
-
-    //   setIsLoading(false);
-    //   console.log(page);
-    // };
-    // fechMovies();
-    // console.log(page);
   };
 
   const handleIsFave = () => {
@@ -51,30 +36,30 @@ function FilmLibrary() {
   const handleIsAll = () => {
     setIsFave(false);
   };
-  const handleAddFave = (e) => {
-    let faveList = [...filmMap];
+  const handleAddFave = (film) => {
+    const faveList = [...films];
     const updatedFilms = faveList.map((item) => {
-      if (item.id === e.id) {
+      if (item.id === film.id) {
         return { ...item, isFave: true };
       }
       return item;
     });
-    setFilmMap(updatedFilms);
+    setFilms(updatedFilms);
   };
-  const handleRemoveFave = (e) => {
-    let faveList = [...filmMap];
+  const handleRemoveFave = (film) => {
+    const faveList = [...films];
     const updatedFilms = faveList.map((item) => {
-      if (item.id === e.id) {
+      if (item.id === film.id) {
         return { ...item, isFave: false };
       }
       return item;
     });
-    setFilmMap(updatedFilms);
+    setFilms(updatedFilms);
   };
-  const handleChangeYear = (e) => {
-    // setFilmMap([]);
-    setYear(e);
-    localStorage.setItem('filmYear', JSON.stringify(e));
+  const handleChangeYear = (year) => {
+    // setFilms([]);
+    setYear(year);
+    localStorage.setItem('filmYear', JSON.stringify(year));
     navigate('/films');
   };
 
@@ -87,42 +72,30 @@ function FilmLibrary() {
         <div className="film-list-filters">
           <button
             onClick={handleIsAll}
-            className={`film-list-filter ${!isFave && 'is-active'}`}
+            className={`film-list-filter ${isFave ? '' : 'is-active'}`}
           >
             ALL
-            <span className="section-count">{filmMap.length}</span>
+            <span className="section-count">{films.length}</span>
           </button>
           <button
             onClick={handleIsFave}
-            className={`film-list-filter ${isFave && 'is-active'}`}
+            className={`film-list-filter ${isFave ? '' : 'is-active'}`}
           >
             FAVES
             <span className="section-count">
-              {filmMap.filter((item) => item.isFave === true).length}
+              {films.filter((item) => item.isFave).length}
             </span>
           </button>
         </div>
+        {(isFave ? films.filter((item) => item.isFave) : films).map((item) => (
+          <FilmRow
+            key={item.id}
+            handleAddFave={handleAddFave}
+            handleRemoveFave={handleRemoveFave}
+            {...item}
+          />
+        ))}
 
-        {!isFave &&
-          filmMap.map((item) => (
-            <FilmRow
-              key={item.id}
-              handleAddFave={handleAddFave}
-              handleRemoveFave={handleRemoveFave}
-              {...item}
-            />
-          ))}
-        {isFave &&
-          filmMap
-            .filter((item) => item.isFave === true)
-            .map((item) => (
-              <FilmRow
-                key={item.id}
-                handleAddFave={handleAddFave}
-                handleRemoveFave={handleRemoveFave}
-                {...item}
-              />
-            ))}
         <button className="load-more" onClick={loadMoreMovies}>
           loadMoreMovies
         </button>

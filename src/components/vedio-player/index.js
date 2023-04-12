@@ -1,7 +1,7 @@
 import React from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './index.css';
-const ViedoPlayer = ({ embedId, isOpen, onClose }) => {
+const VedioPlayer = ({ embedId, isOpen, onClose }) => {
   if (!isOpen) {
     return null;
   }
@@ -30,4 +30,4 @@ const ViedoPlayer = ({ embedId, isOpen, onClose }) => {
   );
 };
 
-export default ViedoPlayer;
+export default VedioPlayer;

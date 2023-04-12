@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import ViedoPlayer from '../../components/vedio-player';
+import VedioPlayer from '../../components/vedio-player';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import './index.css';
-import FilmReview from '../../components/film-review';
 
 const API_KEY = process.env.REACT_APP_YTB_API_KEY;
 
-function FilmDetail(props) {
-  const { backdrop_path, poster_path, title, overview, tagline } = props;
+function FilmDetail({ backdrop_path, poster_path, title, overview, tagline }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ytbFilmId, setYtbFilmId] = useState('');
 
@@ -17,7 +15,7 @@ function FilmDetail(props) {
     )
       .then((data) => data.json())
       .then((data) => setYtbFilmId(data.items[0].id.videoId))
-      .catch((err) => console.log(err));
+      .catch(console.log);
   };
   const handleModalToggle = () => {
     fechFlilmClipId();
@@ -51,7 +49,7 @@ function FilmDetail(props) {
         </p>
       </div>
       <div>{/* <FilmReview title={title} /> */}</div>
-      <ViedoPlayer
+      <VedioPlayer
         isOpen={isModalOpen}
         onClose={handleModalToggle}
         embedId={ytbFilmId}

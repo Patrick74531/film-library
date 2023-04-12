@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
-import { useFilm } from '../../context/film-context'
-import './index.css'
+import { Link } from 'react-router-dom';
+
+import './index.css';
 
 const FilmRow = (props) => {
   const {
@@ -11,13 +11,8 @@ const FilmRow = (props) => {
     handleAddFave,
     handleRemoveFave,
     isFave,
-  } = props
-  const { setFilmReview } = useFilm()
-  const navigate = useNavigate()
-  const handleNavigate = () => {
-    setFilmReview('')
-    navigate(`/films/${id}`)
-  }
+  } = props;
+
   return (
     <div className="FilmRow">
       <img
@@ -38,13 +33,13 @@ const FilmRow = (props) => {
             </button>
           )}
 
-          <button className="action" onClick={handleNavigate}>
+          <Link to={`/films/${id}`} className="action">
             <span className="material-icons">read_more</span>
-          </button>
+          </Link>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FilmRow
+export default FilmRow;
